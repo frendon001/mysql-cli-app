@@ -25,7 +25,7 @@ connection.connect(function(err) {
 // Display available products in Database
 function queryAllProducts() {
   connection.query("SELECT * FROM products", function(err, res) {
-    console.log("Item ID | Item Name | Price($) | Stock Amount");
+    console.log("Item ID | Item Name | Price($) | Stock Quantity");
     for (var i = 0; i < res.length; i++) {
       console.log(res[i].item_id + " | " + res[i].product_name + " | " + res[i].price + " | " + res[i].stock_quantity);
     }
@@ -78,7 +78,6 @@ function purchasePrompt() {
             selectedItem = results[i];
           }
         }
-
         //check to see if selected purchase amount is greater than amount in stock
         //otherwise complete purchase request
         var amountPurchased = parseInt(answer.purchase_amount,10);
@@ -97,7 +96,7 @@ function purchasePrompt() {
   });
 };
 
-// Display available products in Database
+// udpate database
 function completePurchase(id, updatedAmount) {
   connection.query("UPDATE products SET ? WHERE ?", [{
         stock_quantity: updatedAmount
