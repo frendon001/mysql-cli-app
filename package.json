@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/frendon001/mysql-cli-app#readme",
   "dependencies": {
+    "inquirer": "^3.3.0",
     "mysql": "^2.15.0"
   }
 }
