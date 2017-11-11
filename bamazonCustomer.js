@@ -46,7 +46,7 @@ function purchasePrompt() {
     inquirer
       .prompt([{
           name: "item_id",
-          type: "rawlist",
+          type: "list",
           choices: function() {
             var choiceArray = [];
             for (var i = 0; i < results.length; i++) {
