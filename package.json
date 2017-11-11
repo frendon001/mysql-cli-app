@@ -1,0 +1,22 @@
+{
+  "name": "mysql-cli-app",
+  "version": "1.0.0",
+  "description": "The app will take in orders from customers and deplete stock from the store's inventory.",
+  "main": "bamazonCustomer.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/frendon001/mysql-cli-app.git"
+  },
+  "author": "Fausto Rendon",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/frendon001/mysql-cli-app/issues"
+  },
+  "homepage": "https://github.com/frendon001/mysql-cli-app#readme",
+  "dependencies": {
+    "mysql": "^2.15.0"
+  }
+}
