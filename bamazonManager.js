@@ -5,17 +5,17 @@ var connection = mysql.createConnection({
   host: "localhost",
   port: 3306,
 
-  // Your username
+  //username
   user: "root",
 
-  // Your password
+  //password and database name
   password: "",
   database: "bamazon"
 });
 
 connection.connect(function(err) {
   if (err) throw err;
-  console.log("connected as id " + connection.threadId);
+
   //promp user with a menu of options to run
   menu();
 });
@@ -46,11 +46,13 @@ function menu() {
           break;
         case "Add New Product":
           //add new product
+          addNewProduct();
           break;
         default:
           //Statements executed when none of
           //the values match the value of the expression
           console.log("No valid option selected.")
+          connection.end();
           break;
       }
 
@@ -136,19 +138,8 @@ function addInventory() {
 
         //add the amount entered to the selected inventory item
         var amountAdd = parseInt(answer.add_amount, 10) + selectedItem.stock_quantity;
-        console.log(typeof amountAdd,selectedItem.item_id);
+
         completeInventoryUpdate(selectedItem.item_id, amountAdd);
-        // connection.query("UPDATE products SET ? WHERE ?", [{
-        //       stock_quantity: amountAdd
-        //     },
-        //     {
-        //       item_id: selectedItem.item_id
-        //     }
-        //   ],
-        //   function(err, res) {
-        //     if (err) throw err;
-        //     connection.end();
-        //   });
 
       }).catch(function(err) {
         console.log("Promise Rejected", err);
@@ -172,4 +163,60 @@ function completeInventoryUpdate(id, updatedAmount) {
 
 };
 
+// Add new products in Database
+function addNewProduct() {
+  // prompt for info about the new product
+  inquirer
+    .prompt([{
+        name: "item",
+        type: "input",
+        message: "Enter the name of the product:"
+      },
+      {
+        name: "department",
+        type: "input",
+        message: "What department is this product in?"
+      },
+      {
+        name: "price",
+        type: "input",
+        message: "What is the price of the item?",
+        validate: function(value) {
+          if (isNaN(value) === false) {
+            return true;
+          }
+          return 'Please enter a valid numerical value for price.';
+        }
+      },
+      {
+        name: "quantity",
+        type: "input",
+        message: "What is the quantity of in inventory?",
+        validate: function(value) {
+          var pass = value.match(/^\d+$/i);
+          if (pass) {
+            return true;
+          }
 
+          return 'Please enter a valid numerical value for your amount.';
+        }
+      }
+    ])
+    .then(function(answer) {
+      // when finished prompting, insert a new item into the database with that info
+      connection.query(
+        "INSERT INTO products SET ?", {
+          product_name: answer.item,
+          department_name: answer.department,
+          price: answer.price,
+          stock_quantity: answer.quantity
+        },
+        function(err) {
+          if (err) throw err;
+          console.log("Your new product was entered successfully!");
+          connection.end();
+          // re-prompt the user for if they want to bid or post
+        }
+      );
+    });
+};
